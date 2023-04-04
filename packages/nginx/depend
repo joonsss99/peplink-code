@@ -1,0 +1,1 @@
+nginx-dep-y += openssl pcre $(kernel-pkg)

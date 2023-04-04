@@ -1,0 +1,9 @@
+# vim: set syntax=make:
+
+ifeq ("$(shell getconf LONG_BIT)","64")
+BLD_CONFIG_ARCH=native-x86_64
+else
+BLD_CONFIG_ARCH=native-x86
+endif
+
+BLD_CONFIG_INCONTROL=y

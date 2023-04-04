@@ -1,0 +1,3 @@
+libswitch-dep-y += zlib pepos libpepinfo
+libswitch-dep-$(BLD_CONFIG_SWCONFIG) += libnl-1.1 swconfig
+libswitch-dep-$(BLD_CONFIG_EXTSWITCH) += libvtssclient

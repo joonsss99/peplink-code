@@ -1,0 +1,2 @@
+wget-dep-y += libmfa libsqlite libstrutils openssl zlib
+wget-dep-(BLD_CONFIG_MEDIAFAST_BUILT_IN) += pcre

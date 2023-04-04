@@ -1,0 +1,1 @@
+grouped_network_db-dep-y += otautils jansson openssl libstrutils

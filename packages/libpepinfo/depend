@@ -1,0 +1,1 @@
+libpepinfo-dep-y += libstrutils pepos

@@ -1,0 +1,2 @@
+freeradius-client-dep-y += openssl
+freeradius-client-dep-y += pepos

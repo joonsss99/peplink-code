@@ -1,0 +1,17 @@
+balance_scripts-dep-y += \
+	balance_web \
+	libstatus \
+	libstrutils \
+	libpepinfo \
+	openssl \
+	libpismosign \
+	pepos \
+	libsqlite \
+	magicblk \
+	MANGA_verisign \
+	jansson \
+	clienttype_db
+
+balance_scripts-dep-$(BLD_CONFIG_SPEEDFUSION) += $(speedfusion_build-y)
+balance_scripts-dep-$(BLD_CONFIG_BALANCE_KMOD) += $(balance_kmod_build-y)
+balance_scripts-dep-$(BLD_CONFIG_LIBREMOTESIM) += libremotesim

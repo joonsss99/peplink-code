@@ -1,0 +1,37 @@
+==========================================================
+FusionHub partition table:
+==========================================================
+non-PV-GRUB (e.g. VMware, Virtual Box, Hyper-V, Xen)
+Part	Description:
+------	------------
+MBR:	modified version of grub, able to unlock firmware1 and firmware2
+1:	grub bootloader files, unencrypted
+2:	extended partition
+5:	firmware1, encrypted with part5.key
+6:	firmware2, encrypted with part6.key
+7:	configuration, encrypted with part7.key
+8:	magic block and license, encrypted with part8.key
+
+PV-GRUB (e.g. Amazon AWS)
+Part	Description:
+------	------------
+MBR:	nothing
+1:	only has this file: boot/grub/menu.lst
+2:	extended partition
+5:	firmware1, un-encrypted
+6:	firmware2, un-encrypted
+7:	configuration, encrypted with part7.key
+8:	magic block and license, encrypted with part8.key
+
+==========================================================
+Important note for FusionHub firmware <= 6.2.0 build 1250:
+==========================================================
+part1.key and part2.key are for firmware <= 6.2.0 build 1250.
+With firmware <= 6.2.0 build 1250, FusionHub is booted via ISO file.
+A disk image is attached to FusionHub to store magic block, license
+and configuration.
+Disk partition layout for firmware <= 6.2.0 build 1250
+Part	Description:
+------	------------
+1:	magic block and license, encrypted with part1_060200.key
+2:	configuration, encrypted with part5_060200.key

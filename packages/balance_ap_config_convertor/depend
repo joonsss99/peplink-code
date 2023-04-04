@@ -1,0 +1,1 @@
+balance_ap_config_convertor-dep-y += libstrutils libpepinfo libstatus

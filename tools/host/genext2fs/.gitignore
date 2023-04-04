@@ -1,0 +1,8 @@
+.deps/
+Makefile
+config.h
+config.log
+config.status
+genext2fs
+genext2fs.o
+stamp-h1

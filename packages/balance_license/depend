@@ -1,0 +1,1 @@
+balance_license-dep-y += openssl MANGA_verisign libpepinfo libstrutils

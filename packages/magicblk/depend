@@ -1,0 +1,2 @@
+magicblk-dep-y += openssl libpepinfo libstrutils MANGA_verisign pepos
+magicblk-dep-$(BLD_CONFIG_CF_LICENSE) += balance_license

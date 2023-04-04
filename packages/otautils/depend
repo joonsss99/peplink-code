@@ -1,0 +1,1 @@
+otautils-dep-y += openssl pepos jansson wget_https libpepinfo libstatus

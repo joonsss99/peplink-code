@@ -1,0 +1,1 @@
+php-dep-y += curl openssl zlib

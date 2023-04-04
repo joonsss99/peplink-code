@@ -1,0 +1,1 @@
+sfwan_server-dep-y += otautils jansson openssl

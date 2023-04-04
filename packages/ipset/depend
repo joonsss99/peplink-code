@@ -1,0 +1,1 @@
+ipset-dep-y += libmnl $(kernel-pkg)

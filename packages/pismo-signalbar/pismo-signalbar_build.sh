@@ -1,0 +1,21 @@
+#!/bin/sh
+
+PACKAGE=$1
+
+FETCHEDDIR=${FETCHDIR}/${PACKAGE}
+
+CC=$HOST_PREFIX-gcc
+CXX=$HOST_PREFIX-g++
+STRIP=$HOST_PREFIX-strip
+
+. ./make.conf
+. ${PACKAGESDIR}/common/common_functions
+
+abspath=`pwd`
+param="CC=${CC} STRIP=${STRIP}"
+
+LIBSTRUTILS_INCLUDE="$STAGING/usr/include"
+LIBSTRUTILS_LIB="$STAGING/usr/lib"
+
+make -C $FETCHEDDIR ${param} LIBSTRUTILS_INCLUDE=${LIBSTRUTILS_INCLUDE} LIBSTRUTILS_LIB=${LIBSTRUTILS_LIB} || exit $?
+

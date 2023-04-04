@@ -1,0 +1,11 @@
+#!/bin/sh
+
+PACKAGE=$1
+
+FETCHEDDIR=${FETCHDIR}/${PACKAGE}
+
+. ./make.conf
+
+make -C $FETCHEDDIR CROSS_COMPILE=$HOST_PREFIX- all ${MAKE_OPTS} || exit 1
+
+make -C $FETCHEDDIR CROSS_COMPILE=$HOST_PREFIX- install || exit 1

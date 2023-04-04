@@ -1,0 +1,1 @@
+packet_inspection-dep-y += jansson libstrutils pepos $(speedfusion_build-y)

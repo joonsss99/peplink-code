@@ -1,0 +1,1 @@
+libmfa-dep-y += libsqlite libstrutils

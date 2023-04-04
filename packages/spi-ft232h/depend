@@ -1,0 +1,1 @@
+spi-ft232h-dep-y += $(kernel-pkg)

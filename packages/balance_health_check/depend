@@ -1,0 +1,1 @@
+balance_health_check-dep-y += libpepinfo libstatus libstrutils libpismosign jansson pepos

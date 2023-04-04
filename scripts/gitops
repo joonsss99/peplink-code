@@ -1,0 +1,214 @@
+#!/usr/bin/env ruby
+
+#
+# Usage:
+#  scripts/gitops.rb <tag-name> <tag-message>
+#
+# If you have specific projects that doesn't need to be tagged. Please remove
+# it from pkgversion and pkgversion.release
+#
+
+require 'fileutils'
+
+GIT_PUSH_URL = "ssh://gerrit.peplink.com:29418"
+GIT_FETCH_URL = GIT_PUSH_URL
+
+class String
+  def red; "\e[31m#{self}\e[0m" end
+  def green; "\e[32m#{self}\e[0m" end
+  def yellow; "\e[33m#{self}\e[0m" end
+end
+
+def git_ls_remote_check_tag(url, project, ref)
+  `git -c protocol.version=0 ls-remote --exit-code --tags #{url}/#{project} refs/tags/#{ref}`
+  if $?.exitstatus == 0
+    true
+  else
+    false
+  end
+end
+
+def git_ls_remote(url, project, ref)
+  git_output = `git -c protocol.version=0 ls-remote --exit-code #{url}/#{project} #{ref}`
+  if $?.exitstatus == 0
+    git_output
+  else
+    ""
+  end
+end
+
+def refs_pick_output(output)
+  out = []
+  lines = output.split("\n")
+  # the pattern in order of precedence
+  patterns = [ /refs\/heads\//, /refs\/tags\/.*\^\{\}$/, /refs\/tags\// ]
+  # first pattern matching 'lines' goes to 'out'
+  patterns.find do |f|
+    out = lines.grep(f)
+    out[0]
+  end
+
+  return "" unless out[0]
+  out[0].scan(/\w+/)[0]
+end
+
+def git_ref2sha(url, project, ref)
+  if ref =~ /^refs\//
+    output = git_ls_remote(url, project, ref)
+    output.scan(/\w+/)[0]
+  else
+    newref = "refs/tags/#{ref} refs/tags/#{ref}^{} refs/heads/#{ref}"
+    output = git_ls_remote(url, project, newref)
+    refs_pick_output(output)
+  end
+end
+
+# for a pkgversion in _GIT format: k_GIT=p@s
+# returns: [ k, p, s ]
+def pkgversion_git_line_parse(l)
+
+  equal = (l =~ /=/)
+  key = l[0 .. equal - 1].sub(/_GIT$/,'')
+  val = l[equal + 1 .. l.length]
+
+  at = (val =~ /@/)
+  proj = val[0 .. at - 1]
+  refs = val[at + 1 .. val.length].chomp
+
+  [ key, proj, refs ]
+end
+
+def pkgversion_parse(fname)
+  not_git = 0
+  total = 0
+  open(fname, 'r') do |f|
+    f.each do |l|
+      next if l =~ /^$/
+      next if l =~ /^#/
+      total += 1
+      if l !~ /_GIT=/
+        not_git += 1
+        next
+      end
+
+      yield l
+
+    end
+  end
+
+  [total, not_git]
+end
+
+# pkg = { "pepos/kernel" =>  {
+#  "linnux_4_9" => { :refs => "pepos-kernel-4.9", :sha1 => "...." },
+#  "linux_3_6" => { :refs => "pepos-kernel-3.6", :sha1 => "...." },
+#  ... } }
+begin
+  if ARGV.length < 2
+    puts "Not enough argument"
+    puts "  #{$0} <tag-name> <tag-message>"
+    exit
+  end
+
+  pkg = Hash.new { |h,k| h[k] = Hash.new { |x,y| x[y] = {} } }
+
+  total_pkg, not_git_count = pkgversion_parse("profiles/pkgversion") do |l|
+    key, proj, refs = pkgversion_git_line_parse(l)
+    pkg[proj][key][:refs] = refs
+  end
+
+  pkgversion_parse("profiles/pkgversion.release") do |l|
+    key, proj, sha1 = pkgversion_git_line_parse(l)
+    pkg[proj][key][:sha1] = sha1
+  end
+
+  #puts pkg
+
+  puts "Found #{total_pkg - not_git_count} Git packages out of " +
+    "total #{total_pkg} packages"
+
+  puts "Following Git projects are referenced more than once:"
+
+  pkg.each do |p, k|
+    if k.length > 1
+      puts "  #{p}"
+    end
+  end
+
+  tagname = ARGV[0]
+  tagmessage = ARGV[1]
+
+  FileUtils.mkdir_p "gitops_foo"
+
+  pkg.each do |pname, p|
+    puts "Processing Git project: #{pname.green}"
+    dir = File.join("gitops_foo", pname)
+    FileUtils.rm_rf(dir)
+    FileUtils.mkdir_p(dir)
+    Dir.chdir(dir) do
+      `git init`
+      `git remote add origin #{GIT_FETCH_URL}/#{pname}`
+      `git remote set-url --push origin #{GIT_PUSH_URL}/#{pname}`
+      if p.length > 1
+        need_suffix_tag = true
+      end
+      p.each do |kname, k|
+        if git_ls_remote_check_tag(GIT_FETCH_URL, pname, k[:refs])
+          k[:refs_type] = :tag
+        else
+          k[:refs_type] = :branch
+        end
+        if k[:refs_type] == :tag
+          puts "  #{kname.green} is using tag: #{k[:refs].yellow}, " + "skipping".red
+          next
+        end
+        k[:refs_sha1] = git_ref2sha(GIT_FETCH_URL, pname, k[:refs])
+        #puts "#{kname} #{k[:refs_type]}: #{k[:refs]} (#{k[:refs_sha1]}) #{k[:sha1]}"
+        `git fetch -q --depth=2 origin #{k[:sha1]}`
+        if need_suffix_tag
+          k[:tagname] = tagname + "-" + k[:refs]
+        else
+          k[:tagname] = tagname
+        end
+        puts "  #{kname.green}: tagging #{k[:sha1][0..18].yellow} as #{k[:tagname].yellow}"
+        `git tag -a -m \"#{tagmessage}\" #{k[:tagname]} #{k[:sha1]}`
+      end
+    end
+  end
+
+  puts "Ready to push the tags? [y,n,...] (anything other than y will exit)"
+  answer = $stdin.gets
+  if answer.chomp.downcase != 'y'
+    exit
+  end
+
+  pkg.each do |pname, p|
+    puts "Pushing #{pname.green}"
+    dir = File.join("gitops_foo", pname)
+    Dir.chdir(dir) do
+      push_ref = []
+      p.each do |kname, k|
+        next if k[:refs_type] == :tag
+        push_ref << k[:tagname]
+      end
+
+      if push_ref.length > 0
+        `git push origin #{push_ref.join(" ")}`
+      end
+    end
+  end
+
+  puts "Checking pushed tag..."
+
+  pkg.each do |pname, p|
+    p.each do |kname, k|
+      next if k[:refs_type] == :tag
+
+      sha1 = git_ref2sha(GIT_FETCH_URL, pname, k[:tagname])
+      if k[:sha1] != sha1
+        puts "  #{kname.green}: found SHA1 " + "not matching".red +
+          ", #{sha1.yellow}, should be #{k[:sha1].yellow}"
+      end
+    end
+  end
+end

@@ -1,0 +1,1 @@
+MANGA_fwupgrade-dep-y += libstrutils libstatus libpepinfo MANGA_verisign openssl

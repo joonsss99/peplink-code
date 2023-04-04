@@ -1,0 +1,1 @@
+libgcrypt-dep-y += libgpg_error

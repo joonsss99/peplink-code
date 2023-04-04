@@ -1,0 +1,1 @@
+lan_bypass_utils-dep-y += $(kernel-pkg)

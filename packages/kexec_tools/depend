@@ -1,0 +1,1 @@
+kexec_tools-dep-y += $(kernel-pkg)

@@ -1,0 +1,3 @@
+libvirt-dep-y += libnl libxml2 zlib dbus yajl openssl libsasl2 glib libsqlite libffi gnutls qemu dmidecode
+libvirt-dep-$(BLD_CONFIG_SECURITY_APPARMOR) += apparmor
+libvirt-dep-y += libtirpc

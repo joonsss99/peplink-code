@@ -1,0 +1,1 @@
+libacctmgmt-dep-y += libstrutils freeradius-client libcgi libpepinfo

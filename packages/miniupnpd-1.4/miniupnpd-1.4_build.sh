@@ -1,0 +1,20 @@
+#!/bin/sh
+
+PACKAGE=$1
+
+FETCHEDDIR=${FETCHDIR}/${PACKAGE}
+
+. ./make.conf
+. ${PACKAGESDIR}/common/common_functions
+
+abspath=`pwd`
+
+if [ "$IPT_VER_GT_142" = "y" ];then
+EXTRA_FLAGS="IPTABLES_143=1"
+else
+EXTRA_FLAGS=
+fi
+
+make -C $FETCHEDDIR CC=$HOST_PREFIX-gcc IPTABLES_INCLUDE_PATH=${IPTABLES_PATH} KERNEL_PATH=$KERNEL_HEADERS $EXTRA_FLAGS $MAKE_OPTS
+
+

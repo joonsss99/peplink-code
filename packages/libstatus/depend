@@ -1,0 +1,2 @@
+libstatus-dep-y += libpepinfo
+libstatus-dep-$(BLD_CONFIG_BALANCE_KMOD) += $(balance_kmod_build-y)

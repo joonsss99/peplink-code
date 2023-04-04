@@ -1,0 +1,4 @@
+speedfusion-dep-y += $(kernel-pkg) openssl libsqlite libstrutils libstatus pepos
+speedfusion-dep-y += libpepinfo libroutedb x509mgr libevent
+speedfusion-dep-$(BLD_CONFIG_BALANCE_KMOD) += $(balance_kmod_build-y)
+speedfusion-dep-$(BLD_CONFIG_CRYPTO_FIPS_COCO_FIRMWARE) += fips-coco

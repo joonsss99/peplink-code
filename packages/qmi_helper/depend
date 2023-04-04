@@ -1,0 +1,1 @@
+qmi_helper-dep-y += libstrutils

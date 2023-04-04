@@ -1,0 +1,10 @@
+# vim: set syntax=make:
+
+net-snmp-dep-y += openssl libsqlite libstatus libpepinfo libstrutils jansson
+net-snmp-dep-$(BLD_CONFIG_WLAN_LEGACY) += wlan
+net-snmp-dep-$(BLD_CONFIG_LINUX_WIRELESS_PACKAGE) += libnl
+net-snmp-dep-$(BLD_CONFIG_EXTSWITCH) += curl libvtssclient
+net-snmp-dep-$(BLD_CONFIG_LIBSWITCH) += libswitch
+net-snmp-dep-$(BLD_CONFIG_IOTOOLS) += iotools
+net-snmp-dep-$(BLD_CONFIG_SPEEDFUSION) += $(speedfusion_build-y)
+net-snmp-dep-$(BLD_CONFIG_WLC) += balance_ap_extender

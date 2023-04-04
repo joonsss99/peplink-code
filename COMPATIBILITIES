@@ -1,0 +1,8 @@
+* ruby 1.9 or up is required some of the scripts to work
+* Git version 1.7.6 and above is required (1.7.6 supports git ls-remote
+  --exit-code)
+* If your distribution uses the "yama" security modules (e.g. ubuntu)
+  please set /proc/sys/kernel/yama/ptrace_scope to 0 for fakeroot-ng to work.
+* Tar 1.27 and above is required to use the option --keep-directory-symlink.
+* mkimage 2016.11 or above is required to build PowerPC Kernel Image
+* vtss_smbstax requires perl module CGI (and depends on HTML-Parser)

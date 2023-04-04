@@ -1,0 +1,490 @@
+# vim: set syntax=make:
+
+# Build from prebuilt staging/kmod or source projects
+balance_kmod_build-$(PROJECT_SOURCE) := balance_kmod
+speedfusion_build-$(PROJECT_SOURCE) := speedfusion
+capwap_build-$(PROJECT_SOURCE) := capwap
+prebuilt_import-$(BLD_CONFIG_PREBUILT_IMPORT) := prebuilt_import
+
+# PACKAGE LIST define here so that can be used on below libs
+
+#libs in Balance Switch
+SWCONFIG_LIB_PACKAGE := \
+	libnl-1.1 \
+	swconfig
+
+LIBSWITCH_PACKAGE := libswitch
+
+#libs in Peplink SD Switch
+EXTSWITCH_PACKAGE := \
+	libnet \
+	libvtssclient
+
+SFLOWTOOL_PACKAGE := sflowtool
+IOTOOLS_PACKAGE := iotools
+
+LINUX_WIRELESS_PACKAGE := libnl iw hostap
+WIFI_MONITOR_PACKAGE := horst
+WIFI_MONITOR_TEST_PACKAGE := speedtest_cli
+
+# host-tools-y: tools for build system
+host-tools-y :=
+host-tools-$(HOST_TOOL_SQUASHFS_4) += xz-utils
+host-tools-$(HOST_TOOL_SQUASHFS_4) += squashfs_4_2
+host-tools-$(HOST_TOOL_SQUASHFS_3) += squashfs_3_0
+
+# common-lib-y: library common to all products (Balance/FusionHubVM)
+common-lib-y :=
+common-lib-y += $(prebuilt_import-y)
+common-lib-y += \
+	peplink_buildno \
+	setplatform \
+	MANGA_balance_ramdisk_base_common \
+	sysroot \
+	$(kernel-pkg) \
+	openssl
+
+
+common-lib-$(BLD_CONFIG_CRYPTO_FIPS_COCO_FIRMWARE) += fips-coco
+common-lib-y += \
+	zlib \
+	pcre \
+	libsqlite \
+	pepos \
+	libstrutils \
+	libpepinfo
+
+common-lib-$(BLD_CONFIG_BALANCE_KMOD) += $(balance_kmod_build-y)
+
+common-lib-y += \
+	$(iptables-pkg) \
+	$(ebtables-pkg) \
+	libstatus \
+	iniparser \
+	MANGA_verisign \
+	clienttype_db
+common-lib-$(BLD_CONFIG_CF_LICENSE) += balance_license
+common-lib-$(findstring y,$(BLD_CONFIG_SPEEDFUSION)$(BLD_CONFIG_PREBUILT_IMPORT)) += libroutedb
+common-lib-$(findstring y,$(BLD_CONFIG_BALANCE_FULL_FEATURE)$(BLD_CONFIG_FHVM)$(BLD_CONFIG_MEDIAFAST_CONTENTHUB)$(HAS_STORAGE_MGMT_TOOLS)) += e2fsprogs
+common-lib-y += x509mgr \
+	libpismosign \
+	libevent \
+	magicblk \
+	libpcap \
+	jansson \
+	wget_https \
+	curl \
+	otautils \
+	flex \
+	balance_feature_activation \
+	freeradius-client \
+	libpam \
+	pam_tacplus \
+	libmobile \
+	libpepmodule \
+	balance_ap_extender \
+	balance_conf_convertor
+common-lib-$(findstring y,$(BLD_CONFIG_MEDIAFAST_WEBPROXY)$(BLD_CONFIG_WGET)) += libmfa
+common-lib-y += libcgi
+common-lib-$(BLD_CONFIG_SWCONFIG) += $(SWCONFIG_LIB_PACKAGE)
+common-lib-$(BLD_CONFIG_LIBREMOTESIM) += libremotesim
+common-lib-$(BLD_CONFIG_REMOTESIM) += remotesim
+common-lib-$(findstring y,$(BLD_CONFIG_KVM)$(BLD_CONFIG_SECURITY_APPARMOR_UTILS)) += libffi
+common-lib-$(findstring y,$(BLD_CONFIG_MEDIAFAST_WEBPROXY)$(BLD_CONFIG_KVM)) += expat
+common-lib-$(findstring y,$(BLD_CONFIG_KVM)$(BLD_CONFIG_BALANCE)$(BLD_CONFIG_FHVM)) += libtirpc
+common-lib-$(BLD_CONFIG_LPA) += liblpa
+
+wlan-pkg-y =
+wlan-pkg-$(BLD_CONFIG_WLAN_LEGACY) = wlan
+wlan-pkg-$(BLD_CONFIG_WLAN_10_2) = wlan-10.2
+
+###### Important: Sort for dependency ######
+
+# common-utils-y: app/utils common to all products (Balance/FusionHubVM)
+common-utils-y :=
+common-utils-$(BLD_CONFIG_SPEEDFUSION) += $(speedfusion_build-y)
+common-utils-$(BLD_CONFIG_SPEEDFUSION) += sfwan_server
+common-utils-$(BLD_CONFIG_EXTSWITCH) += $(EXTSWITCH_PACKAGE)
+common-utils-$(BLD_CONFIG_LIBSWITCH) += $(LIBSWITCH_PACKAGE)
+common-utils-$(BLD_CONFIG_EXTSWITCH) += $(SFLOWTOOL_PACKAGE)
+common-utils-$(BLD_CONFIG_IOTOOLS) += $(IOTOOLS_PACKAGE)
+common-utils-$(BLD_CONFIG_IPSET) += $(ipset-pkg)
+common-utils-$(BLD_CONFIG_LINUX_WIRELESS_PACKAGE) += $(LINUX_WIRELESS_PACKAGE)
+common-utils-$(BLD_CONFIG_WIFI_MONITOR) += $(WIFI_MONITOR_PACKAGE)
+common-utils-$(BLD_CONFIG_WIFI_MONITOR_TEST) += $(WIFI_MONITOR_TEST_PACKAGE)
+common-utils-$(BLD_CONFIG_WIFI) += $(wlan-pkg-y)
+common-utils-$(BLD_CONFIG_WLAN_STATS_NG) += wlan_stats
+common-utils-$(BLD_CONFIG_WIFI) += balance_ap_config_convertor
+common-utils-$(BLD_CONFIG_WAN_STATS) += wan_stats
+common-utils-$(BLD_CONFIG_CAPTIVE_PORTAL) += \
+	libportal \
+	captive-portal
+common-utils-y += \
+	balance_web \
+	balance_legal \
+	balance_default_config
+common-utils-$(findstring y,$(BLD_CONFIG_BALANCE_KMOD)$(BLD_CONFIG_PREBUILT_IMPORT)) += balance_health_check
+common-utils-$(BLD_CONFIG_PACKET_INSPECTION) += packet_inspection
+common-utils-$(BLD_CONFIG_KERNEL_V5_10) += iproute2_v4_9_0
+common-utils-$(BLD_CONFIG_KERNEL_V4_9) += iproute2_v4_9_0
+common-utils-$(BLD_CONFIG_KERNEL_V4_19_MTK) += iproute2_v4_9_0
+common-utils-$(BLD_CONFIG_KERNEL_V3_6) += iproute2_v3_6_0
+common-utils-$(BLD_CONFIG_KERNEL_V2_6_28) += iproute2
+common-utils-y += \
+	balance_scripts \
+	util-linux \
+	metalog \
+	zonenotify \
+	ethtool \
+	MANGA_fwupgrade \
+	nginx \
+	nginx-upload-module \
+	nginx-pepos-config \
+	fcgi \
+	fcgiwrap \
+	busybox \
+	dnrd \
+	module-init-tools \
+	ucspi-tcp-0.88
+common-utils-$(BLD_CONFIG_OPENSSH) += openssh
+common-utils-$(BLD_CONFIG_OPENSSH_LEGACY) += openssh-legacy
+common-utils-y += \
+	MANGA_login \
+	iputils \
+	traceroute \
+	xor \
+	nuttcp
+common-utils-$(BLD_CONFIG_SPEEDFUSION) += \
+	bird
+common-utils-y += \
+	connection_test_utils \
+	tcptraceroute \
+	ncurses \
+	procps \
+	netcat \
+	pismo_serialnet \
+	timezone \
+	net-snmp \
+	grep \
+	findutils \
+	bridge-utils \
+	shellinabox \
+	pv \
+	vdsl_module_updater
+
+common-utils-$(BLD_CONFIG_ST_FIRMWARE) += \
+	mcu_firmware
+common-utils-$(BLD_CONFIG_ST_OLED) += stoled_panel
+common-utils-$(BLD_CONFIG_SECURITY_APPARMOR_UTILS) += \
+	readline \
+	python3_for_build \
+	python3
+common-utils-$(BLD_CONFIG_SECURITY_APPARMOR) += apparmor
+common-utils-$(BLD_CONFIG_SECURITY_TOMOYO) += tomoyo_tools
+common-utils-$(BLD_CONFIG_NETFLOW) += ipt-netflow
+common-utils-$(BLD_CONFIG_ZIXI) += zixi
+common-utils-$(BLD_CONFIG_BATMAN_ADV) += batctl
+
+common-utils-y += \
+	ca-certs \
+	contentdb \
+	grouped_network_db \
+	umd
+
+BALANCE_COMMON_LIB := \
+	popt
+
+#apps only in all Peplink Balance
+BALANCE_COMMON_UTILS := \
+	updatedd \
+	miniupnpd-1.4 \
+	nsping \
+	keepalived-1.1.15 \
+	balance_conf_hasync \
+	ppp \
+	openl2tp \
+	pptpd \
+	openvpn \
+	strongswan \
+	synergy_utils
+#add new Peplink Balance common app here
+
+#libs in Peplink Balance except device with limited memory, e.g motg
+BALANCE_OPTIONAL_LIB := \
+	openldap \
+	freeradius-server \
+	freeradius-server-conf
+#add new Peplink Balance optional lib here
+
+#apps in Peplink Balance except device with limited memory, e.g motg
+BALANCE_OPTIONAL_UTILS := \
+	tinydns \
+	balance_tinydnsdata \
+	dhcp \
+	strace
+#add new Peplink Balance optional app here
+
+#libs in VM platforms
+VM_EXTRA_UTILS := \
+	virt-what
+
+#libs in FusionHub VM
+FUSIONHUBVM_COMMON_LIB := \
+	libfhlicense \
+	popt \
+	openldap
+#add new FusionHub VM only lib here
+
+#apps in FusionHub VM only
+FUSIONHUBVM_COMMON_UTILS := \
+	fusionhub_scripts \
+	freeradius-server \
+	freeradius-server-conf \
+	strace \
+	ppp \
+	openl2tp \
+	pptpd \
+	openvpn \
+	strongswan
+
+# linux 5.10 might not need this amzn-drivers (need testing)
+ifeq ("$(BLD_CONFIG_KERNEL_V4_9)","y")
+FUSIONHUBVM_COMMON_UTILS += amzn-drivers
+endif
+
+#add new FusionHub VM only app here
+
+#apps in Device Connector
+DCS_EXTRA_UTILS := \
+#add new Device Connector only app here
+
+#apps in Switch
+SWITCH_EXTRA_UTILS := \
+	umd \
+	updatedd \
+	nsping \
+	ifmetric \
+	configd \
+	dhcpmon \
+	vtss_smbstax
+#add new Switch only app here
+
+#prepare and install system partition key and firmware info data
+SYSTEM_INFO_PACKAGE := \
+	MANGA_patch \
+	MANGA_info_build
+
+#PACKAGING_TOOLS: patch, finalize and pack the firmware
+PACKAGING_TOOLS := \
+	inittab_finalize \
+	finalize \
+	timebomb \
+	$(rdisk-pkg-y) \
+	$(upgrader-pkg)
+
+#
+#feature support packages
+#
+
+CLI_SUPPORT_PACKAGE := \
+	klish \
+	balance_cli
+
+#signal bar for cellular and Wi-Fi
+SIGNAL_BAR_SUPPORT_PACKAGE := \
+	pismo-signalbar
+
+#dm crypt partition
+DM_CRYPT_SUPPORT_PACKAGE := \
+	json-c \
+	libgpg_error \
+	libgcrypt \
+	lvm2 \
+	cryptsetup
+
+#gobi
+GOBI_SUPPORT_PACKAGE := \
+	gobi_helper
+
+# [Bug#15462] ContentHub packages
+x86_64-or-powerpc = $(if $(filter-out x86_64 powerpc,$(BLD_CONFIG_ARCH)),,y)
+x86_64-only = $(if $(filter-out x86_64,$(BLD_CONFIG_ARCH)),,y)
+ar7100-only = $(if $(filter-out ar7100,$(BLD_CONFIG_ARCH)),,y)
+chub-pcpkg-packages-y := \
+	zlib \
+	openssl \
+	ncurses \
+	libsqlite
+# [Bug#19795] ContentHub Essential Package
+chub-pcpkg-packages-$(ar7100-only) += \
+	libstrutils \
+	libmfa \
+	wget \
+	php \
+	rsync \
+	contenthub_essential
+# Python
+chub-pcpkg-packages-y += \
+	libffi \
+	balance_sdk \
+	python_for_build \
+	python \
+	python3_for_build \
+	python3
+# Node.js (not compatible with 32-bit PowerPC platform)
+chub-pcpkg-packages-$(x86_64-only) += \
+	python_for_build \
+	nodejs
+# Ruby
+chub-pcpkg-packages-y += \
+	ruby_for_build \
+	ruby
+# Add new ContentHub packages above
+CHUB_PCPKG_PACKAGES = \
+	$(chub-pcpkg-packages-y) \
+	contenthub_packager
+
+# [Bug#19795] MediaFast core
+MEDIAFAST_CORE_PACKAGES := \
+	mediafast
+# [Bug#19795] MediaFast required packages which MAY be downloaded instead of built in
+MEDIAFAST_BUILT_IN_PACKAGES := \
+	parted \
+	lvm2 \
+	smartmontools \
+	wget
+# [Bug#19795] MediaFast (webproxy)
+MEDIAFAST_WEBPROXY_PACKAGES := \
+	tcl \
+	apache-trafficserver \
+	sslsplit
+# [Bug#19795] ContentHub
+MEDIAFAST_CONTENTHUB_PACKAGES := \
+	php \
+	rsync
+
+# [Bug#19908] Downloadable modules, initially for Python 3
+MODULE_PACKAGES := \
+	python3_for_build \
+	python3
+
+#mobile device management
+MDM_SUPPORT_PACKAGE := \
+	libacctmgmt \
+	libcapn \
+	mdm
+
+#modem
+MODEM_SUPPORT_PACKAGE := \
+	ppp \
+	gps_utils \
+	mobile_modem_hc \
+	mobile_modem_status \
+	mobile_modem_profiles \
+	qmi_helper
+
+#modem advance
+MODEM_SUPPORT_ADVANCE_PACKAGE := \
+	usb_modeswitch \
+	mbim_helper
+
+# lpa_helper
+LPA_PACKAGE := \
+	lpa
+
+#eudev
+EUDEV_PACKAGE := \
+	eudev
+
+#SMP utilities
+SMP_SUPPORT_PACKAGE := \
+	sysstat
+
+#tcpdump
+TCPDUMP_SUPPORT_PACKAGE := \
+	tcpdump
+
+#WiMAX
+WIMAX_SUPPORT_PACKAGE := \
+	wimax
+
+INCONTROL_PACKAGE := \
+	$(capwap_build-y)
+
+KVM_PACKAGE := \
+	libpng \
+	pixman \
+	glib \
+	qemu \
+	libxml2 \
+	yajl \
+	dbus \
+	gmp-6.2 \
+	libtasn1 \
+	libunistring \
+	gnutls \
+	libsasl2 \
+	dmidecode \
+	libvirt \
+	inotify-tools
+
+BALANCE_FRONTPANEL_PACKAGE := \
+	balance_frontpanel
+
+BALANCE_LANNER_PACKAGE := \
+	lanner_led
+
+extra-lib-$(BLD_CONFIG_TCPDUMP) += $(TCPDUMP_SUPPORT_PACKAGE)
+extra-lib-$(BLD_CONFIG_BALANCE) += $(BALANCE_COMMON_LIB)
+extra-lib-$(BLD_CONFIG_BALANCE_FULL_FEATURE) += $(BALANCE_OPTIONAL_LIB)
+extra-lib-$(BLD_CONFIG_FHVM) += $(FUSIONHUBVM_COMMON_LIB)
+
+extra-$(BLD_CONFIG_MTDUTILS) += mtd-utils
+extra-$(BLD_CONFIG_PCIUTILS) += pciutils
+extra-$(BLD_CONFIG_LAN_BYPASS_UTILS) += lan_bypass_utils
+extra-$(BLD_CONFIG_SIGNAL_BAR) += $(SIGNAL_BAR_SUPPORT_PACKAGE)
+extra-$(BLD_CONFIG_DM_CRYPT_PARTITION) += $(DM_CRYPT_SUPPORT_PACKAGE)
+extra-$(BLD_CONFIG_LPA) += $(LPA_PACKAGE)
+extra-$(BLD_CONFIG_GOBI) += $(GOBI_SUPPORT_PACKAGE)
+extra-$(BLD_CONFIG_MODEM) += $(MODEM_SUPPORT_PACKAGE)
+extra-$(BLD_CONFIG_MODEM_ADVANCE) += $(MODEM_SUPPORT_ADVANCE_PACKAGE)
+extra-$(BLD_CONFIG_EUDEV) += $(EUDEV_PACKAGE)
+extra-$(BLD_CONFIG_SMP) += $(SMP_SUPPORT_PACKAGE)
+extra-$(HAS_WIMAX) += $(WIMAX_SUPPORT_PACKAGE)
+extra-$(BLD_CONFIG_BALANCE) += $(BALANCE_COMMON_UTILS)
+extra-$(BLD_CONFIG_CLI) += $(CLI_SUPPORT_PACKAGE)
+extra-$(BLD_CONFIG_BALANCE_FULL_FEATURE) += $(BALANCE_OPTIONAL_UTILS)
+extra-$(BLD_CONFIG_SAMBA) += kerberos
+# BLD_CONFIG_SAMBA and BLD_CONFIG_SAMBA_WINS_ONLY is mutually exclusive
+extra-$(BLD_CONFIG_SAMBA) += samba
+extra-$(BLD_CONFIG_SAMBA_WINS_ONLY) += samba-wins-only
+extra-$(BLD_CONFIG_BALANCE_FRONTPANEL) += $(BALANCE_FRONTPANEL_PACKAGE)
+extra-$(BLD_CONFIG_LANNER_PERIPHERAL) += $(BALANCE_LANNER_PACKAGE)
+extra-$(BLD_CONFIG_VM) += $(VM_EXTRA_UTILS)
+extra-$(BLD_CONFIG_FHVM) += $(FUSIONHUBVM_COMMON_UTILS)
+extra-$(HAS_CONTENTHUB_PACKAGES) += $(CHUB_PCPKG_PACKAGES)
+extra-$(HAS_MEDIAFAST_CORE) += $(MEDIAFAST_CORE_PACKAGES)
+extra-$(findstring y,$(BLD_CONFIG_MEDIAFAST_CONTENTHUB)$(BLD_CONFIG_KVM)) += elfinder
+extra-$(BLD_CONFIG_MEDIAFAST_BUILT_IN) += $(MEDIAFAST_BUILT_IN_PACKAGES)
+ifeq ($(BLD_CONFIG_MEDIAFAST_BUILT_IN),y)
+	extra-$(BLD_CONFIG_MEDIAFAST_WEBPROXY) += $(MEDIAFAST_WEBPROXY_PACKAGES)
+	extra-$(BLD_CONFIG_MEDIAFAST_CONTENTHUB) += $(MEDIAFAST_CONTENTHUB_PACKAGES)
+endif
+extra-$(BLD_CONFIG_MDM) += $(MDM_SUPPORT_PACKAGE)
+extra-$(BLD_CONFIG_VSC73XX) += vsc73xx_firmware
+extra-$(BLD_CONFIG_EXTSWITCH) += $(SWITCH_EXTRA_UTILS)
+extra-$(BLD_CONFIG_DCS) += $(DCS_EXTRA_UTILS)
+extra-$(BLD_CONFIG_INCONTROL) += $(INCONTROL_PACKAGE)
+extra-$(BLD_CONFIG_KVM) += $(KVM_PACKAGE)
+extra-$(BLD_CONFIG_QCA_NSS_DRV) += qca-ssdk qca-nss-dp qca-nss-drv qca-nss-firmware
+extra-$(BLD_CONFIG_QCA_NSS_CRYPTO) += qca-nss-crypto qca-nss-cfi
+extra-$(BLD_CONFIG_LORAWANGW) += sx1302_hal lora_basicstation spi-ft232h
+extra-$(BLD_CONFIG_BLUETOOTH) += bluez
+extra-$(BLD_CONFIG_QRTR) += qrtr
+extra-$(BLD_CONFIG_MTK_HWNAT) += mtk-hwnat
+extra-$(BLD_CONFIG_MTK_PKG) += mtk
+extra-$(BLD_CONFIG_LINUX_BACKPORTS) += linux-backports
+extra-y += $(SYSTEM_INFO_PACKAGE)
+
+extra-$(BLD_CONFIG_KERNEL_V5_10) += kexec_tools
+extra-$(if $(BLD_CONFIG_KERNEL_V5_10),,$(FW_CONFIG_KDUMP)) += kexec_tools_pre_k419

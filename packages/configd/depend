@@ -1,0 +1,1 @@
+configd-dep-y += balance_web libvtssclient libstrutils libpepinfo libswitch pepos

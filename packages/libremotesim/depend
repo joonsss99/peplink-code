@@ -1,0 +1,1 @@
+libremotesim-dep-y += libstrutils pepos

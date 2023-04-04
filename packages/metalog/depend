@@ -1,0 +1,2 @@
+metalog-dep-y += pcre libpepinfo libstrutils pepos
+metalog-dep-$(BLD_CONFIG_SPEEDFUSION) += libsqlite $(speedfusion_build-y) libstatus

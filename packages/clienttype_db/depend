@@ -1,0 +1,1 @@
+clienttype_db-dep-y += libsqlite libstrutils pepos $(balance_kmod_build-y)

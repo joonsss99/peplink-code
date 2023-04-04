@@ -1,0 +1,1 @@
+libportal-dep-y += libstatus libpepinfo pepos freeradius-client libstrutils wget_https jansson openssl libcgi libsqlite pepos

@@ -1,0 +1,1 @@
+kexec_tools_pre_k419-dep-y += $(kernel-pkg)

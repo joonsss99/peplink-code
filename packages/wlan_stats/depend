@@ -1,0 +1,2 @@
+wlan_stats-dep-y += openssl libstrutils
+wlan_stats-dep-$(BLD_CONFIG_WLAN_LEGACY) += wlan

@@ -1,0 +1,19 @@
+#!/bin/sh
+
+install -dv ${MNT}/{bin,boot,dev,etc/opt,home,lib,mnt,proc}
+install -dv ${MNT}/{sbin,usr/local,var}
+install -dv ${MNT}/root -m 0750
+install -dv ${MNT}/tmp ${MNT}/var/tmp -m 1777
+install -dv ${MNT}/usr/{bin,include,lib,sbin}
+install -dv ${MNT}/usr/local/{bin,etc,include,lib,sbin,src}
+install -dv ${MNT}/var/{lock,log,mail,run,spool}
+install -dv ${MNT}/var/{opt,cache,lib/{misc,locate},local}
+install -dv ${MNT}/etc/rc.d
+install -dv ${MNT}/etc/rc.d/{rc3.d,init.d}
+install -dv ${MNT}/etc/sysconfig
+# The micrel toolchain is fucked up with hardcoded
+# stupid lib path! Need to link the lib in this path
+# otherwise fail to find the share lib
+install -dv ${MNT}/home/Kendin/tools/arm-linux
+ln -s /lib ${MNT}/home/Kendin/tools/arm-linux/lib 
+

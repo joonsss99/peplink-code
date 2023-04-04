@@ -1,0 +1,1 @@
+balance_tinydnsdata-dep-y += libstatus libstrutils libpepinfo

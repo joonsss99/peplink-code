@@ -1,0 +1,1 @@
+mdm-dep-y += jansson libacctmgmt libcapn libsqlite libpepinfo openssl libcgi libstatus

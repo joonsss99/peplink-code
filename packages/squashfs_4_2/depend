@@ -1,0 +1,1 @@
+squashfs_4_2-dep-y += xz-utils

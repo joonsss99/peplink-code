@@ -1,0 +1,1 @@
+qemu-dep-y += libgcrypt glib pcre pixman openssl libffi libsqlite zlib

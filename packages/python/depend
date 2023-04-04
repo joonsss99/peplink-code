@@ -1,0 +1,1 @@
+python-dep-y += zlib ncurses python_for_build

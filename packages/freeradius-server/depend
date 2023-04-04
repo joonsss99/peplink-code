@@ -1,0 +1,1 @@
+freeradius-server-dep-y += openssl openldap

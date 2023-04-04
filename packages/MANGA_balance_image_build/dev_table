@@ -1,0 +1,93 @@
+# Device table for used by genext2fs (does not generate the symlink we needed in /dev)
+#
+
+# Sorted by major/minor number, block device goes first
+
+#<name>			<type>	<mode>	<uid>	<gid>	<major>	<minor>	<start>	<inc>	<count>
+/dev		d	755	0	0	-	-	-	-	-
+/dev/pts		d	755	0	0	-	-	-	-	-
+/dev/shm		d	755	0	0	-	-	-	-	-
+/dev/usb		d	755	0	0	-	-	-	-	-
+/dev/usb/tts	d	755	0	0	-	-	-	-	-
+
+/dev/ram0		b	644	0	0	1	0	0	0	-
+/dev/mem		c	644	0	0	1	1	0	0	-
+/dev/kmem		c	644	0	0	1	2	0	0	-
+/dev/null		c	644	0	0	1	3	0	0	-
+/dev/zero		c	644	0	0	1	5	0	0	-
+/dev/full		c	644	0	0	1	7	0	0	-
+/dev/random		c	644	0	0	1	8	0	0	-
+/dev/urandom	c	644	0	0	1	9	0	0	-
+
+/dev/ptyp		c	644	0	0	2	0	0	1	10
+
+/dev/hda		b	644	0	0	3	0	0	0	-
+/dev/hda		b	644	0	0	3	1	1	1	20
+/dev/hdb		b	644	0	0	3	64	0	0	-
+/dev/hdb		b	644	0	0	3	65	1	1	20
+
+/dev/ttyp		c	644	0	0	3	0	0	1	10
+
+/dev/tty		c	644	0	0	4	0	0	1	10
+/dev/ttyS		c	644	0	0	4	64	0	1	5
+
+/dev/tty		c	644	0	0	5	0	0	0	-
+/dev/console	c	644	0	0	5	1	0	0	-
+/dev/ptmx		c	644	0	0	5	2	0	0	-
+
+/dev/loop0		b	644	0	0	7	0	0	0	-
+/dev/loop1		b	644	0	0	7	1	0	0	-
+
+/dev/vcs0		c	644	0	0	7	0	0	0	-
+/dev/vcs1		c	644	0	0	7	1	0	0	-
+/dev/vcsa0		c	644	0	0	7	128	0	0	-
+/dev/vcsa1		c	644	0	0	7	129	0	0	-
+
+/dev/sda		b	644	0	0	8	0	0	0	-
+/dev/sda		b	644	0	0	8	1	1	1	15
+/dev/sdb		b	644	0	0	8	16	0	0	-
+/dev/sdb		b	644	0	0	8	17	1	1	15
+/dev/sdc		b	644	0	0	8	32	0	0	-
+/dev/sdc		b	644	0	0	8	33	1	1	15
+/dev/sdd		b	644	0	0	8	48	0	0	-
+/dev/sdd		b	644	0	0	8	49	1	1	15
+
+/dev/watchdog	c	644	0	0	10	130	0	0	-
+/dev/rtc		c	644	0	0	10	135	0	0	-
+
+/dev/hdc		b	644	0	0	22	0	0	0	-
+/dev/hdc		b	644	0	0	22	1	1	1	20
+/dev/hdd		b	644	0	0	22	64	0	0	-
+/dev/hdd		b	644	0	0	22	65	1	1	20
+
+/dev/mtd		b	644	0	0	31	0	0	1	9
+
+/dev/hde		b	644	0	0	33	0	0	0	-
+/dev/hde		b	644	0	0	33	1	1	1	20
+/dev/hdf		b	644	0	0	33	64	0	0	-
+/dev/hdf		b	644	0	0	33	65	1	1	20
+
+/dev/hdg		b	644	0	0	34	0	0	0	-
+/dev/hdg		b	644	0	0	34	1	1	1	20
+/dev/hdh		b	644	0	0	34	64	0	0	-
+/dev/hdh		b	644	0	0	34	65	1	1	20
+
+/dev/ppp		c	644	0	0	108	0	0	0	-
+
+/dev/ttyUSB		c	644	0	0	188	0	0	1	51
+/dev/usb/tts/.	c	644	0	0	188	0	0	1	51
+
+/dev/ttyAM0		c	644	0	0	204	16	0	0	-
+/dev/ttyAM1		c	644	0	0	204	17	0	0	-
+
+/dev/tarang247	c	644	0	0	247	0	0	0	-
+/dev/tarang248	c	644	0	0	248	0	0	0	-
+/dev/tarang249	c	644	0	0	249	0	0	0	-
+/dev/tarang250	c	644	0	0	250	0	0	0	-
+/dev/tarang251	c	644	0	0	251	0	0	0	-
+/dev/tarang252	c	644	0	0	252	0	0	0	-
+
+/dev/rtc0		c	644	0	0	254	0	0	0	-
+/dev/rtc1		c	644	0	0	254	1	0	0	-
+/dev/rtc2		c	644	0	0	254	2	0	0	-
+

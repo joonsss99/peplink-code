@@ -1,0 +1,7 @@
+dir:tmp/mnt/vendor
+dir:tmp/mnt/vendor/nvcfg
+dir:tmp/mnt/vendor/protect_s
+dir:tmp/mnt/vendor/protect_f
+dir:tmp/mnt/vendor/nvdata
+dir:tmp/mnt/vendor/mdota
+dir:tmp/mnt/vendor/mdota2

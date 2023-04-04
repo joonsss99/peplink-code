@@ -1,0 +1,1 @@
+glib-dep-y += libffi zlib pcre

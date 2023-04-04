@@ -1,0 +1,2 @@
+python3-dep-y += zlib openssl ncurses libffi python3_for_build
+python3-dep-$(BLD_CONFIG_SECURITY_APPARMOR_UTILS) += readline

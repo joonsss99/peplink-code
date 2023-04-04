@@ -1,0 +1,1 @@
+fips-coco-dep-y += $(kernel-pkg)

@@ -1,0 +1,1 @@
+mtk-hwnat-dep-y += $(kernel-pkg)

@@ -1,0 +1,1 @@
+pismo-signalbar-dep-y += $(kernel-pkg) libpepinfo libstrutils

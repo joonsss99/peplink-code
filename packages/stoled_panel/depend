@@ -1,0 +1,1 @@
+stoled_panel-dep-y += libpepinfo libstrutils libstatus jansson openssl wget_https pepos

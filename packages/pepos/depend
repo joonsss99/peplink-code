@@ -1,0 +1,1 @@
+pepos-dep-y += libsqlite libstrutils $(kernel-pkg)

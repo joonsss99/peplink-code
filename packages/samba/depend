@@ -1,0 +1,1 @@
+samba-dep-y += openssl zlib openldap kerberos popt

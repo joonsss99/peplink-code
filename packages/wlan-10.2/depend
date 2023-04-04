@@ -1,0 +1,1 @@
+wlan-10.2-dep-y += $(kernel-pkg) libstrutils pepos openssl libstatus

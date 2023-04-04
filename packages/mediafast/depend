@@ -1,0 +1,1 @@
+mediafast-dep-$(BLD_CONFIG_MEDIAFAST_WEBPROXY) += libsqlite jansson libmfa libstrutils zlib pcre

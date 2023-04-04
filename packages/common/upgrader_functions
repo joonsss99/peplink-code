@@ -1,0 +1,308 @@
+# vim: set syntax=sh:
+
+get_fwname() {
+	case $1 in
+	fhvm)
+		echo "fusionhub_sfcn"
+		;;
+	plb700)
+		echo "b305_380_580_710_1350"
+		;;
+	plb2500)
+		echo "b305hw2_380hw6_580hw2_710hw3_1350hw2_2500"
+		;;
+	pwmhd4)
+		echo "b1_210hw4_310hw4_br1ent_transit_m700hw3_hd2mini_hd4"
+		;;
+	m700)
+		echo "m700_hd2"
+		;;
+	plb30b)
+		echo "b20_30"
+		;;
+	plb310b)
+		echo "b210_310_hw2_hw3"
+		;;
+	pwmaxotg)
+		echo "maxotg"
+		;;
+	pwmaxbr1)
+		echo "max_br1_br2"
+		;;
+	maxbr1ac)
+		echo "max_br1mk2_hotspot_sohomk3"
+		;;
+	pwmsoho)
+		echo "surf_soho"
+		;;
+	pwmdcs)
+		echo "dcs_dcsip55hw2"
+		;;
+	pwmdcsp)
+		echo "dcsp"
+		;;
+	dcsipq)
+		echo "dcsip55hw4"
+		;;
+	pwmdcsm)
+		echo "sfew"
+		;;
+	plsw8)
+		echo "plsw8"
+		;;
+	plsw16)
+		echo "plsw16"
+		;;
+	plsw24)
+		echo "plsw24"
+		;;
+	plsw48)
+		echo "plsw48"
+		;;
+	apx)
+		echo "epx_mbx_sdx"
+		;;
+	ipq)
+		echo "b20x"
+		;;
+	vbal)
+		echo "sftvm"
+		;;
+	apone)
+		echo "apone_acminihw2_flexhw4"
+		;;
+	aponeac)
+		echo "apone_ruggedhw2"
+		;;
+	aponeax)
+		echo "aponeax"
+		;;
+	sfchn)
+		echo "sfchn"
+		;;
+	maxbr1c)
+		echo "br1p_br2p_transitp_hd1dp_hd2dp_hd1hw4_hd2hw7"
+		;;
+	mtk5g)
+		echo "br1d"
+		;;
+	ramips)
+		echo "br1minihw3"
+		;;
+	*)
+		echo "fwname_not_defined"
+		exit 1;
+		;;
+	esac
+}
+
+get_upload_path() {
+	case $1 in
+	fhvm)
+		echo "fusionhub"
+		;;
+	plb700)
+		echo "plb700"
+		;;
+	plb2500)
+		echo "plb2500"
+		;;
+	pwmhd4)
+		echo "plb1"
+		;;
+	m700)
+		echo "m700"
+		;;
+	plb30b)
+		echo "plb30"
+		;;
+	plb310b)
+		echo "plb310"
+		;;
+	pwmaxotg)
+		echo "motg"
+		;;
+	pwmaxbr1)
+		echo "br1"
+		;;
+	maxbr1ac)
+		echo "br1ac"
+		;;
+	pwmsoho)
+		echo "soho"
+		;;
+	pwmdcs)
+		echo "dcs"
+		;;
+	pwmdcsp)
+		echo "dcs"
+		;;
+	dcsipq)
+		echo "dcs"
+		;;
+	pwmdcsm)
+		echo "dcs"
+		;;
+	plsw8)
+		echo "plsw8"
+		;;
+	plsw16)
+		echo "plsw16"
+		;;
+	plsw24)
+		echo "plsw24"
+		;;
+	plsw48)
+		echo "plsw48"
+		;;
+	apx)
+		echo "epx"
+		;;
+	ipq)
+		echo "ipq"
+		;;
+	vbal)
+		echo "vbalance"
+		;;
+	apone)
+		echo "apone"
+		;;
+	aponeac)
+		echo "aponeac"
+		;;
+	aponeax)
+		echo "aponeax"
+		;;
+	sfchn)
+		echo "sfchn"
+		;;
+	maxbr1c)
+		echo "br1c"
+		;;
+	mtk5g)
+		echo "mtk5g"
+		;;
+	ramips)
+		echo "ramips"
+		;;
+	*)
+		echo "fwname_not_defined"
+		exit 1;
+		;;
+	esac
+}
+
+gencrc_image() {
+	echo -e "${TCOLOR_GREEN}Prepending CRC to image (genimage)...${TCOLOR_NORMAL}"
+	$HOST_TOOLS_DIR/genimage $@
+}
+
+fiwm_image() {
+	local fiwm_model=$1
+	local fwimg=$2
+	local outname=$3
+	local gen_version=`echo $VERSION | cut -d 'v' -f 2 | sed "s/\([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/g"`
+	local fwgen=0
+	local fwcfg=1
+
+	echo -e "${TCOLOR_GREEN}Running fiwm...${TCOLOR_NORMAL}"
+
+	[ "$BLD_CONFIG_ENCRYPT_FIRMWARE" = "y" ] && fwgen=2
+
+	$FIWM_BIN $fwimg $fiwm_model GENERIC $gen_version $outname "${VERSION}" "${fwgen}" "${fwcfg}" || exit 1
+}
+
+sign_image() {
+	local fwmodel=$1
+	local fwimg=$2
+	local fiwm_name=$3
+	local key_type="dsa"
+
+	if [ "$BLD_CONFIG_FWKEY_V3_ED25519" = "y" ] ; then
+		key_type="ed25519"
+	fi
+
+	echo -en "${TCOLOR_GREEN}Contacting firmware signing server for ${TCOLOR_YELLOW}${fwmodel}${TCOLOR_NORMAL} ($key_type)... "
+	if ! ssh fwsign@keyservice.pepos.peplink.com fw $key_type $fwmodel < $fiwm_name > $fwimg ; then
+		echo ""
+		exit 1
+	fi
+	echo -e "${TCOLOR_GREEN}Done!${TCOLOR_NORMAL}"
+}
+
+# set public variable $FILENAME
+set_fw_filename() {
+	local fwimg=$1
+	local fwname_model=$2
+
+	if [ "$FW_BUILD_NUMBER" = "n" ] ; then
+		FILENAME=${abspath}/images/fw-${fwname_model}-${FIRMWARE_VERSION}.bin
+	else
+		FILENAME=${abspath}/images/fw-${fwname_model}-${FIRMWARE_VERSION}-build${BUILD_NUMBER}.bin
+	fi
+	cp -f $fwimg $FILENAME
+}
+
+print_image_info() {
+	local kimage=$1
+	local rdiskimage=$2
+	local fwbin=$3
+	local ksize rsize fwsize
+
+	rsize=$(ls -s -L --block-size=1 $rdiskimage | cut -d ' ' -f 1)
+	ksize=$(ls -s -L --block-size=1 $kimage | cut -d ' ' -f 1)
+	fwsize=$(ls -s -L --block-size=1 $fwbin | cut -d ' ' -f 1)
+	echo ""
+	echo "Rdisk size: $rsize	($(basename $rdiskimage)) "
+	echo "Kernel size: $ksize	($(basename $kimage))"
+	echo "Firmware size: $fwsize	($(basename $fwbin))"
+	echo -e "Firmware path: ${TCOLOR_YELLOW}$fwbin${TCOLOR_NORMAL}"
+	echo ""
+}
+
+firmware_package_and_sign() {
+	local kimage=$1
+	local rdiskimage=$2
+	local biglittle
+
+	case $PL_BUILD_ARCH in
+	ar7100|powerpc)
+		biglittle="-b"
+		;;
+	x86*|arm*|ramips)
+		biglittle="-l"
+		;;
+	*)
+		echo "unknown PL_BUILD_ARCH($PL_BUILD_ARCH) to determine target endiness"
+		return 1
+		;;
+	esac
+
+	mkdir -p $abspath/images/upload
+
+	for m in $FIRMWARE_MODEL_LIST ; do
+		if [ "$PL_BUILD_ARCH" = "ar7100" ]; then
+			rdiskpkg="rdiskpkg.${m}"
+		else
+			rdiskpkg="rdiskpkg"
+		fi
+
+		gencrc_image $biglittle $rdiskpkg firmware.${m}.img
+		fiwm_image $m firmware.${m}.img firmware.${m}.1
+		sign_image $m firmware.${m}.img firmware.${m}.1
+		set_fw_filename firmware.${m}.img `get_fwname $m`
+
+		# download.peplink.com path and firmware image mapping
+		if [ ! -L $abspath/images/upload/$(get_upload_path $m) ]; then
+			rm -f $abspath/images/upload/$(get_upload_path $m)
+			ln -s ../$(basename $FILENAME) $abspath/images/upload/$(get_upload_path $m)
+		fi
+
+		if [ -f firmware.${m}.img -a -f $FILENAME ] ; then
+			print_image_info $kimage $rdiskimage $FILENAME
+		else
+			echo_error "firmware image for model $m not created"
+		fi
+	done
+}
+

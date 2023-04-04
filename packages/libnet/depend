@@ -1,0 +1,1 @@
+libnet-dep-y += $(kernel-pkg)

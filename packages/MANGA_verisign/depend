@@ -1,0 +1,1 @@
+MANGA_verisign-dep-y += libstrutils openssl iniparser $(kernel-pkg)

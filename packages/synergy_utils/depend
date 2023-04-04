@@ -1,0 +1,1 @@
+synergy_utils-dep-y += libstrutils libstatus pepos libpepinfo openssl jansson libevent

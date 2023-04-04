@@ -1,0 +1,3 @@
+wan_stats-dep-y += libstatus
+wan_stats-dep-$(BLD_CONFIG_LINUX_WIRELESS_PACKAGE) += hostap
+wan_stats-dep-$(BLD_CONFIG_WIFI) += $(wlan-pkg-y)

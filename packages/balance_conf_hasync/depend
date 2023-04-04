@@ -1,0 +1,1 @@
+balance_conf_hasync-dep-y += libstatus libpepinfo libstrutils balance_conf_convertor

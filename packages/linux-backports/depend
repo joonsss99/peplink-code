@@ -1,0 +1,1 @@
+linux-backports-dep-y += $(kernel-pkg)

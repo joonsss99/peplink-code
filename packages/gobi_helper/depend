@@ -1,0 +1,2 @@
+gobi_helper-dep-y += libstatus libmobile libstrutils pepos
+gobi_helper-dep-$(BLD_CONFIG_LIBREMOTESIM) += libremotesim

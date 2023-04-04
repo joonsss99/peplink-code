@@ -1,0 +1,1 @@
+u-boot-fw-utils-dep-y += $(kernel-pkg)

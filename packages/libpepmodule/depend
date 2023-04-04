@@ -1,0 +1,1 @@
+libpepmodule-dep-y += libstrutils jansson libstatus

@@ -1,0 +1,1 @@
+ruby-dep-y += zlib ruby_for_build

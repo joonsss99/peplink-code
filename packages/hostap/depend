@@ -1,0 +1,1 @@
+hostap-dep-y += $(kernel-pkg) openssl libnl pepos

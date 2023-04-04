@@ -1,0 +1,1 @@
+libfhlicense-dep-y += magicblk libpepinfo libstrutils pepos $(balance_kmod_build-y)

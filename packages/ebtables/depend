@@ -1,0 +1,1 @@
+ebtables-dep-y += $(kernel-pkg)

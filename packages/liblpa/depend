@@ -1,0 +1,1 @@
+liblpa-dep-y += curl zlib

@@ -1,0 +1,1 @@
+qca-nss-cfi-dep-y += qca-nss-drv qca-nss-crypto

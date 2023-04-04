@@ -1,0 +1,1 @@
+apparmor-dep-$(BLD_CONFIG_SECURITY_APPARMOR_UTILS) += python3_for_build

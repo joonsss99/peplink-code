@@ -1,0 +1,1 @@
+bird-dep-y += libroutedb $(speedfusion_build-y) libstrutils libstatus libsqlite pepos

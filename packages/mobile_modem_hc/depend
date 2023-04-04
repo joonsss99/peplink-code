@@ -1,0 +1,3 @@
+mobile_modem_hc-dep-y += libstrutils libstatus libmobile libpepinfo pepos
+mobile_modem_hc-dep-$(BLD_CONFIG_LIBREMOTESIM) += libremotesim
+mobile_modem_hc-dep-$(BLD_CONFIG_MTK_PKG) += mtk curl openssl zlib

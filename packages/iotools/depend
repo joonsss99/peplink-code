@@ -1,0 +1,2 @@
+iotools-dep-y += libstrutils jansson openssl pepos libpismosign libpepinfo
+iotools-dep-$(BLD_CONFIG_LIBSWITCH) += libswitch

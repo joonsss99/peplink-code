@@ -1,0 +1,20 @@
+# Instruction to export/import prebuilt project tarball
+# ## EXPORT ##
+# uncomment BLD_CONFIG_PREBUILT_EXPORT=y in this file
+# make -j 4 all.d
+# OR, just make install PKG="balance_kmod speedfusion capwap"
+#     if the firmware had already been built
+#
+# ## IMPORT ##
+# uncomment BLD_CONFIG_PREBUILT_IMPORT=y in this file
+# mkdir  projects_import/ and put project tarballs there
+# e.g. projects_import/balance_kmod_20191118.tgz
+# make -j 4 all.d
+
+# uncomment below to create tarball of prebuilt projects
+#BLD_CONFIG_PREBUILT_EXPORT=y
+
+# umcomment below to use prebuilt tarballs for firmware build
+#BLD_CONFIG_PREBUILT_IMPORT=y
+# uncomment below to download prebuild tarballs from http link
+#BLD_CONFIG_PREBUILT_IMPORT_LINK=http://prebuild.peplink.com

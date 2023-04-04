@@ -1,0 +1,1 @@
+dhcpmon-dep-y += libpcap libnet libswitch pepos libstrutils

@@ -1,0 +1,78 @@
+# vim: set syntax=make:
+#
+# current codename: gooseberry
+#
+
+VERSION = 9
+SUBLEVEL = 0
+PATCHLEVEL = 0
+EXTRA_VERSION = # this must start with non-numeric
+MODEM_PACKAGE_VERSION = 1026
+__TAGNAME = fw
+
+# Do you need a build number?
+FW_BUILD_NUMBER=n
+export FW_BUILD_NUMBER
+
+#
+# debug build is default enabled for trunk. You have to explicitely turn it off when
+# building beta or RC builds. (set to "n")
+#
+FW_DEBUG_BUILD = n
+export FW_DEBUG_BUILD
+
+#
+# whether we will plant a timebomb in firmware.
+# timestamp format: YYYYMMDD
+#
+# NOTE 1: timebomb also control whether RA is on by default
+# NOTE 2: timebomb also contral whether firmware upgrade key is required
+#
+TIMEBOMB = yes
+TIMEBOMB_STAMP := $(shell date --date='90 day' +'%Y%m%d')
+
+# --- if you want to override the values above, do it after this line ---
+
+ifeq ("$(BUILD_TARGET)","plsw")
+VERSION = 1
+SUBLEVEL = 3
+PATCHLEVEL = 1
+EXTRA_VERSION =
+__TAGNAME = switch-
+else ifneq (,$(filter apone aponeac aponeax,$(BUILD_TARGET)))
+VERSION = 3
+SUBLEVEL = 9
+PATCHLEVEL = 4
+EXTRA_VERSION =
+__TAGNAME = apone-
+endif
+
+ifeq ("$(BUILD_TARGET)","vbal")
+TIMEBOMB = yes
+TIMEBOMB_STAMP = $(shell date --date='90 day' +'%Y%m%d')
+endif
+
+ifneq (,$(filter "$(BUILD_TARGET)","maxdcs" "maxdcs_ppc" "maxdcs_ipq"))
+VERSION = 1
+SUBLEVEL = 2
+PATCHLEVEL = 0
+EXTRA_VERSION =
+__TAGNAME = dcs
+endif
+#### do not change anything below ####
+
+VERSION := $(strip $(VERSION))
+SUBLEVEL := $(strip $(SUBLEVEL))
+PATCHLEVEL := $(strip $(PATCHLEVEL))
+EXTRA_VERSION := $(strip $(EXTRA_VERSION))
+
+# firmware version string
+FIRMWARE_VERSION := $(VERSION).$(SUBLEVEL).$(PATCHLEVEL)$(EXTRA_VERSION)
+
+ifeq ($(FW_DEBUG_BUILD),y)
+FIRMWARE_VERSION := $(FIRMWARE_VERSION)_DEBUG
+endif
+
+export FIRMWARE_VERSION
+export MODEM_PACKAGE_VERSION
+export TIMEBOMB TIMEBOMB_STAMP

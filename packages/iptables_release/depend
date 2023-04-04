@@ -1,0 +1,1 @@
+iptables_release-dep-y += $(kernel-pkg)

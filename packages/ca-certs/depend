@@ -1,0 +1,1 @@
+ca-certs-dep-y += otautils jansson openssl

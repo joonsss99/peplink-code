@@ -1,0 +1,2 @@
+# uses the buildin zlib and popt on model "chub_maxotg"
+rsync-dep-$(BLD_CONFIG_MEDIAFAST_BUILT_IN) += $(kernel-pkg) popt openssl

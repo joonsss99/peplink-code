@@ -1,0 +1,1 @@
+iproute2-dep-y += $(kernel-pkg)

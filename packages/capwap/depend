@@ -1,0 +1,18 @@
+capwap-dep-y += \
+	MANGA_verisign \
+	magicblk \
+	libsqlite \
+	libstatus \
+	balance_feature_activation \
+	jansson \
+	wget_https \
+	pepos \
+	libstrutils \
+	x509mgr \
+	zlib \
+	openssl \
+	libpepinfo \
+	balance_ap_extender
+
+capwap-dep-$(BLD_CONFIG_WAN_STATS) += wan_stats
+capwap-dep-$(BLD_CONFIG_SPEEDFUSION) += $(speedfusion_build-y)

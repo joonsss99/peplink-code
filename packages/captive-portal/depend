@@ -1,0 +1,1 @@
+captive-portal-dep-y += libstatus libpepinfo libstrutils openssl jansson libsqlite libcgi wget_https libportal

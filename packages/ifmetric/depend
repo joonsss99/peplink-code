@@ -1,0 +1,1 @@
+ifmetric-dep-y += $(kernel-pkg)

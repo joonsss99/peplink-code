@@ -1,0 +1,2 @@
+keepalived-1.1.15-dep-y += $(kernel-pkg) libstrutils libstatus
+keepalived-1.1.15-dep-$(BLD_CONFIG_LIBSWITCH) += libswitch

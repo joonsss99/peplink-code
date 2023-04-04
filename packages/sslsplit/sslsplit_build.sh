@@ -1,0 +1,11 @@
+#!/bin/sh
+
+PACKAGE=$1
+
+ABSPATH=`pwd`
+FETCHEDDIR=${FETCHDIR}/${PACKAGE}
+
+. ./make.conf
+
+make -C ${FETCHEDDIR} OPENSSL_BASE=${STAGING}/usr/ LIBEVENT_BASE=${STAGING}/usr/ \
+	CC=$HOST_PREFIX-gcc LD=$HOST_PREFIX-ld $MAKE_OPTS || exit $?

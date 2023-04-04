@@ -1,0 +1,2 @@
+x509mgr-dep-y += openssl libpepinfo libstrutils pepos
+x509mgr-dep-$(BLD_CONFIG_MEDIAFAST_CONTENTHUB) += e2fsprogs

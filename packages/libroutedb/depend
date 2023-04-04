@@ -1,0 +1,1 @@
+libroutedb-dep-y += libstrutils libpepinfo libsqlite pepos

@@ -1,0 +1,1 @@
+samba-wins-only-dep-y += openssl zlib popt

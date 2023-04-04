@@ -1,0 +1,3 @@
+umd-dep-y += libpepinfo libstrutils pepos libstatus
+umd-dep-$(BLD_CONFIG_SPEEDFUSION) += $(speedfusion_build-y) libsqlite
+umd-dep-$(BLD_CONFIG_EXTSWITCH) += zlib sflowtool

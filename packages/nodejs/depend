@@ -1,0 +1,1 @@
+nodejs-dep-y += zlib openssl python3_for_build

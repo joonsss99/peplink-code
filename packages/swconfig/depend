@@ -1,0 +1,1 @@
+swconfig-dep-y += libnl-1.1 $(kernel-pkg)

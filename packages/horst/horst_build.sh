@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+PACKAGE=$1
+
+FETCHEDDIR=${FETCHDIR}/${PACKAGE}
+
+make -C ${FETCHEDDIR} CC=${HOST_PREFIX}-gcc CONFIG_PISMO_AIRMON=y

@@ -1,0 +1,1 @@
+iptables-dep-y += $(kernel-pkg) $(balance_kmod_build-y)

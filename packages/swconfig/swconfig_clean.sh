@@ -1,0 +1,9 @@
+#!/bin/sh
+
+PACKAGE=$1
+
+FETCHEDDIR=${FETCHDIR}/${PACKAGE}
+
+FMK="-f ${PROJECT_MAKE}/Makefile"
+
+make ${FMK} ${MAKE_OPTS} -C ${FETCHEDDIR} CROSS_COMPILE=$HOST_PREFIX- clean

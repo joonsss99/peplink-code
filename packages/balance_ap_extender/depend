@@ -1,0 +1,1 @@
+balance_ap_extender-dep-y += libstrutils libpepinfo MANGA_verisign

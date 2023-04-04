@@ -1,0 +1,2 @@
+balance_kmod-dep-y += $(kernel-pkg) libstrutils pepos libpepinfo
+balance_kmod-dep-$(BLD_CONFIG_CRYPTO_FIPS_COCO_FIRMWARE) += fips-coco

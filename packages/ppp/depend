@@ -1,0 +1,2 @@
+ppp-dep-y += libpepinfo pepos
+ppp-dep-$(BLD_CONFIG_BALANCE_KMOD) += $(balance_kmod_build-y)

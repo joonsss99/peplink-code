@@ -1,0 +1,1 @@
+pixman-dep-y += libpng zlib $(kernel-pkg)

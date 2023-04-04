@@ -1,0 +1,1 @@
+ipt-netflow-dep-y += $(kernel-pkg) $(iptables-pkg) net-snmp
